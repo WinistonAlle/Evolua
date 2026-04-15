@@ -367,23 +367,33 @@ export async function savePatientRecord(
 export async function dischargePatientRecord(userId: string, patientId: string) {
   const workspace = await getOrganizationMembership(userId);
 
-  const { data, error } = await supabase
+  const { data: existingPatient, error: existingPatientError } = await supabase
+    .from("patients")
+    .select("id")
+    .eq("organization_id", workspace.organizationId)
+    .eq("id", patientId)
+    .is("deleted_at", null)
+    .maybeSingle<{ id: string }>();
+
+  if (existingPatientError) {
+    throw new Error(existingPatientError.message);
+  }
+
+  if (!existingPatient?.id) {
+    throw new Error("Não foi possível localizar o paciente para registrar a alta.");
+  }
+
+  const { error } = await supabase
     .from("patients")
     .update({
       status: "discharged",
     })
     .eq("organization_id", workspace.organizationId)
     .eq("id", patientId)
-    .is("deleted_at", null)
-    .select("id")
-    .maybeSingle<{ id: string }>();
+    .is("deleted_at", null);
 
   if (error) {
     throw new Error(error.message);
-  }
-
-  if (!data?.id) {
-    throw new Error("Não foi possível localizar o paciente para registrar a alta.");
   }
 }
 

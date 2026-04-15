@@ -650,11 +650,14 @@ export const ConfirmGlassCard = styled.div`
   width: min(100%, 560px);
   overflow: hidden;
   border-radius: 30px;
-  border: 1px solid rgba(17, 32, 49, 0.08);
+  border: 1px solid rgba(173, 72, 72, 0.16);
   background:
-    radial-gradient(320px 180px at 0% 0%, rgba(var(--accent-rgb), 0.14), transparent 62%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.92), rgba(244, 248, 251, 0.88));
-  box-shadow: 0 24px 80px rgba(8, 15, 28, 0.18);
+    radial-gradient(340px 220px at 0% 0%, rgba(239, 68, 68, 0.12), transparent 62%),
+    radial-gradient(320px 180px at 100% 100%, rgba(245, 158, 11, 0.08), transparent 68%),
+    linear-gradient(180deg, rgba(255, 252, 251, 0.97), rgba(248, 243, 241, 0.94));
+  box-shadow:
+    0 24px 80px rgba(8, 15, 28, 0.16),
+    0 8px 24px rgba(173, 72, 72, 0.08);
   backdrop-filter: blur(28px) saturate(165%);
 
   html[data-theme="dark"] & {
@@ -673,18 +676,28 @@ export const ConfirmGlassCard = styled.div`
 
 export const ConfirmGlassOrb = styled.div`
   position: absolute;
-  top: -88px;
-  right: -42px;
-  width: 240px;
-  height: 240px;
+  top: -96px;
+  right: -54px;
+  width: 256px;
+  height: 256px;
   border-radius: 999px;
   background: radial-gradient(
     circle,
-    rgba(var(--accent-rgb), 0.34) 0%,
-    rgba(var(--accent-rgb), 0.08) 62%,
+    rgba(239, 68, 68, 0.22) 0%,
+    rgba(245, 158, 11, 0.12) 42%,
+    rgba(239, 68, 68, 0.04) 68%,
     transparent 75%
   );
   pointer-events: none;
+
+  html[data-theme="dark"] & {
+    background: radial-gradient(
+      circle,
+      rgba(var(--accent-rgb), 0.34) 0%,
+      rgba(var(--accent-rgb), 0.08) 62%,
+      transparent 75%
+    );
+  }
 `;
 
 export const ConfirmGlassContent = styled.div`
@@ -704,11 +717,11 @@ export const ConfirmGlassEyebrow = styled.span`
   width: fit-content;
   padding: 7px 12px;
   border-radius: 999px;
-  border: 1px solid rgba(17, 32, 49, 0.1);
-  background: rgba(17, 32, 49, 0.05);
-  color: var(--text-secondary);
+  border: 1px solid rgba(173, 72, 72, 0.16);
+  background: rgba(255, 255, 255, 0.62);
+  color: rgba(126, 40, 40, 0.86);
   font-size: 11px;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 
@@ -721,7 +734,7 @@ export const ConfirmGlassEyebrow = styled.span`
 
 export const ConfirmGlassTitle = styled.h3`
   margin: 0;
-  color: var(--text-primary);
+  color: #2a1618;
   font-family: var(--font-display);
   font-size: 32px;
   font-weight: 800;
@@ -731,24 +744,32 @@ export const ConfirmGlassTitle = styled.h3`
   @media (max-width: 640px) {
     font-size: 26px;
   }
+
+  html[data-theme="dark"] & {
+    color: var(--text-primary);
+  }
 `;
 
 export const ConfirmGlassText = styled.p`
   margin: 0;
-  color: var(--text-secondary);
+  color: rgba(58, 31, 31, 0.76);
   font-size: 15px;
   font-weight: 500;
   line-height: 1.7;
+
+  html[data-theme="dark"] & {
+    color: var(--text-secondary);
+  }
 `;
 
 export const ConfirmGlassPatient = styled.div`
   padding: 16px 18px;
   border-radius: 18px;
-  border: 1px solid var(--line-soft);
-  background: rgba(255, 255, 255, 0.62);
-  color: var(--text-primary);
+  border: 1px solid rgba(173, 72, 72, 0.14);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.84), rgba(255, 245, 243, 0.92));
+  color: #341b1d;
   font-size: 16px;
-  font-weight: 700;
+  font-weight: 800;
   line-height: 1.35;
   word-break: break-word;
 
