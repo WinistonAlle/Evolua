@@ -35,6 +35,8 @@ export function PatientsProvider({ children }: { children: ReactNode }) {
       setWorkspace(result.workspace);
     } catch (nextError) {
       const message = nextError instanceof Error ? nextError.message : "Erro ao carregar pacientes.";
+      setPatients([]);
+      setWorkspace(null);
       setError(message);
     } finally {
       setLoading(false);

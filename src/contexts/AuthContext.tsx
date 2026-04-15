@@ -15,11 +15,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     let mounted = true;
 
-    supabase.auth.getSession().then(({ data }) => {
-      if (!mounted) return;
-      setSession(data.session);
-      setLoading(false);
-    });
+    supabase.auth
+      .getSession()
+      .then(({ data }) => {
+        if (!mounted) return;
+        setSession(data.session);
+      })
+      .catch(() => {
+        if (!mounted) return;
+        setSession(null);
+      })
+      .finally(() => {
+        if (!mounted) return;
+        setLoading(false);
+      });
 
     const {
       data: { subscription },

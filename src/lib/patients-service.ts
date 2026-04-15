@@ -270,7 +270,24 @@ export async function createPatientRecord(userId: string, name: string, profile?
     throw new Error(error.message);
   }
 
-  await syncPatientLinks(workspace.organizationId, data.id, userId, profile);
+  try {
+    await syncPatientLinks(workspace.organizationId, data.id, userId, profile);
+  } catch (syncError) {
+    const { error: rollbackError } = await supabase
+      .from("patients")
+      .delete()
+      .eq("organization_id", workspace.organizationId)
+      .eq("id", data.id);
+
+    if (rollbackError) {
+      const syncMessage = syncError instanceof Error ? syncError.message : "Erro ao sincronizar links.";
+      throw new Error(
+        `${syncMessage} O paciente foi criado, mas não foi possível concluir o rollback automático.`,
+      );
+    }
+
+    throw syncError;
+  }
 
   return {
     ...mapPatientRow(data),
@@ -322,7 +339,7 @@ export async function savePatientRecord(
 ) {
   const workspace = await getOrganizationMembership(userId);
 
-  const { error: updateError } = await supabase
+  const { data, error: updateError } = await supabase
     .from("patients")
     .update({
       phone: profile.phone || null,
@@ -331,10 +348,17 @@ export async function savePatientRecord(
       metadata: buildPatientMetadata(profile),
     })
     .eq("organization_id", workspace.organizationId)
-    .eq("id", patientId);
+    .eq("id", patientId)
+    .is("deleted_at", null)
+    .select("id")
+    .maybeSingle<{ id: string }>();
 
   if (updateError) {
     throw new Error(updateError.message);
+  }
+
+  if (!data?.id) {
+    throw new Error("Não foi possível localizar o paciente para salvar a ficha.");
   }
 
   await syncPatientLinks(workspace.organizationId, patientId, userId, profile);
